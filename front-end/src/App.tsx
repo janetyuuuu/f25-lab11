@@ -153,7 +153,7 @@ class App extends React.Component<Props, AppState> {
         <div id="board">
           {this.state.cells.map((cell, i) => this.createCell(cell, i))}
         </div>
-        <div id="instructions">
+        <div id="instructions" className={this.state.winner ? 'winner' : undefined}>
           {instructionsText}
         </div>
         <div id="bottombar">

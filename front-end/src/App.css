@@ -1,47 +1,118 @@
-#board {
-  display: grid;
-  grid-template-columns: auto auto auto;
-  background-color: #2196F3;
-  padding: 10px
+:root {
+  --bg-color: #f0f2f5;
+  --board-bg: #ffffff;
+  --primary-color: #55a5e7; /* Material Blue */
+  --accent-color: #ff4757;  /* Soft Red */
+  --text-color: #2f3542;
+  --shadow-light: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-hover: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --cell-size: 200px;
+  --gap-size: 20px;
 }
 
-.cell {
-  background-color: rgba(255, 255, 255, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
-  font-size: 30px;
-  height: 25vmin;
-  text-align: center;
-}
-
-#bottombar {
-  height: 5vh;
-}
-
-#instructions {
-  height: 5vh;
-  background-color: white;
-  padding: 0px;
-  margin: 0px;
-  text-align: center;
-  border: 1px solid black;
-}
-
-#bottombar button {
-  width: 50%;
-  /* height: 100%; */
-  margin: 0;
-  padding: 0;
-  position: relative;
-  float: left;
-  font-size: 2vw
-}
-
-html,
-body {
+html, body {
   height: 100%;
   margin: 0;
   padding: 0;
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
 
-.playable { background-color: red;}
+/* Main container to center the game on screen */
+body > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+/* --- The Board --- */
+#board {
+  display: grid;
+  grid-template-columns: repeat(3, var(--cell-size));
+  grid-gap: var(--gap-size);
+  background-color: var(--text-color); /* Creates the border lines via gap */
+  padding: var(--gap-size);
+  border-radius: 12px;
+  box-shadow: var(--shadow-hover);
+  margin-bottom: 20px;
+}
+
+.cell {
+  background-color: var(--board-bg);
+  height: var(--cell-size);
+  display: flex;             /* Center X/O vertically and horizontally */
+  align-items: center;
+  justify-content: center;
+  font-size: 8rem;
+  font-weight: bold;
+  cursor: default;
+  transition: background-color 0.2s ease;
+}
+
+/* Specific styling for the top-left, top-right, etc. could go here for rounded corners, 
+   but keeping it simple with the container radius is cleaner. */
+
+/* Interactive states */
+.playable {
+  cursor: pointer;
+}
+
+.playable:hover {
+  background-color: #e3f2fd; /* Very light blue on hover */
+}
+
+/* --- Instructions & Status --- */
+#instructions {
+  margin-bottom: 20px;
+  padding: 15px 25px;
+  background-color: white;
+  border-radius: 30px;
+  box-shadow: var(--shadow-light);
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  min-width: 200px;
+  transition: transform 0.2s;
+}
+
+#instructions.winner {
+  background-color: var(--primary-color);
+  color: white;
+  transform: scale(1.1); /* Pop effect when someone wins */
+}
+
+/* --- Buttons (Bottom Bar) --- */
+#bottombar {
+  display: flex;
+  gap: 15px;
+  width: 100%;
+  justify-content: center;
+}
+
+#bottombar button {
+  background-color: white;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 10px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+#bottombar button:hover {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: var(--shadow-light);
+  transform: translateY(-2px);
+}
+
+#bottombar button:active {
+  transform: translateY(0);
+}
