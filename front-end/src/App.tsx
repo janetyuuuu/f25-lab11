@@ -63,6 +63,16 @@ class App extends React.Component<Props, AppState> {
     });
   }
 
+  undo = async () => {
+    const response = await fetch('/undo');
+    const json = await response.json();
+    this.setState({ 
+      cells: json['cells'],
+      currentPlayer: json['currentPlayer'] ?? null,
+      winner: json['winner'] ?? null 
+    });
+  }
+
   /**
    * play will generate an anonymous function that the component
    * can bind with.
@@ -149,7 +159,7 @@ class App extends React.Component<Props, AppState> {
         <div id="bottombar">
           <button onClick={/* get the function, not call the function */this.newGame}>New Game</button>
           {/* Exercise: implement Undo function */}
-          <button>Undo</button>
+          <button onClick={this.undo}>Undo</button>
         </div>
       </div>
     );

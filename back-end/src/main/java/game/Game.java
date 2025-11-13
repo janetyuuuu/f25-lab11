@@ -74,4 +74,11 @@ public class Game {
         if (p == null) return null;
         return (p == Player.PLAYER0) ? "X" : "O";
     }
+
+    public Game undo() {
+        if (this.history.isEmpty()) {
+            return this;
+        }
+        return this.history.get(this.history.size() - 1);
+    }
 }
