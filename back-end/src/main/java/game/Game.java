@@ -68,4 +68,10 @@ public class Game {
             return board.getCell(1, 1);
         return null;
     }
+
+    /** Convert Player enum to "X"/"O" string; return null if p is null. */
+    public String symbol(Player p) {
+        if (p == null) return null;
+        return (p == Player.PLAYER0) ? "X" : "O";
+    }
 }

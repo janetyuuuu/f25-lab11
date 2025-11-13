@@ -3,6 +3,13 @@ import './App.css'; // import the css file to enable your styles.
 import { GameState, Cell } from './game';
 import BoardCell from './Cell';
 
+type Player = 'X' | 'O' | null;
+
+interface AppState extends GameState {
+  currentPlayer: Player;  // whose turn
+  winner: Player;         // winner if any
+}
+
 /**
  * Define the type of the props field for a React component
  */
@@ -23,7 +30,7 @@ interface Props { }
  * state is the internal value of the component and managed by
  * the component itself.
  */
-class App extends React.Component<Props, GameState> {
+class App extends React.Component<Props, AppState> {
   private initialized: boolean = false;
 
   /**
@@ -34,7 +41,11 @@ class App extends React.Component<Props, GameState> {
     /**
      * state has type GameState as specified in the class inheritance.
      */
-    this.state = { cells: [] }
+    this.state = { 
+      cells: [],
+      currentPlayer: null,
+      winner: null
+    }
   }
 
   /**
@@ -45,7 +56,11 @@ class App extends React.Component<Props, GameState> {
   newGame = async () => {
     const response = await fetch('/newgame');
     const json = await response.json();
-    this.setState({ cells: json['cells'] });
+    this.setState({ 
+      cells: json['cells'],
+      currentPlayer: json['currentPlayer'],
+      winner: json['winner'] 
+    });
   }
 
   /**
@@ -61,7 +76,11 @@ class App extends React.Component<Props, GameState> {
       e.preventDefault();
       const response = await fetch(`/play?x=${x}&y=${y}`)
       const json = await response.json();
-      this.setState({ cells: json['cells'] });
+      this.setState({ 
+        cells: json['cells'],
+        currentPlayer: json['currentPlayer'] ?? null,
+        winner: json['winner'] ?? null
+      });
     }
   }
 
@@ -113,10 +132,19 @@ class App extends React.Component<Props, GameState> {
      * can treat HTML elements as code.
      * @see https://reactjs.org/docs/introducing-jsx.html
      */
+    const instructionsText = (() => {
+      if (this.state.winner) return `Winner: ${this.state.winner}`;
+      if (this.state.currentPlayer) return `Current player: ${this.state.currentPlayer}`;
+      return '';
+    })();
+
     return (
       <div>
         <div id="board">
           {this.state.cells.map((cell, i) => this.createCell(cell, i))}
+        </div>
+        <div id="instructions">
+          {instructionsText}
         </div>
         <div id="bottombar">
           <button onClick={/* get the function, not call the function */this.newGame}>New Game</button>
